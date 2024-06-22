@@ -14,6 +14,9 @@ General purpose .NET assembly modding "basework", powered by [cecil](https://git
 
 <sup>[... or download fresh build artifacts for the last commit.](https://dev.azure.com/MonoMod/MonoMod/_build/latest?definitionId=1)</sup>
 
+## Fork Notice
+This fork uses [the amazing work from Fadenfire](https://github.com/Fadenfire/MonoMod/tree/macos-m1) to add ARM64 support. I only re-forked from the base MonoMod repo to make syncing with upstream easier.
+
 ## Sections
 - [Introduction](#introduction)
 - [Using RuntimeDetour](docs/RuntimeDetour/Usage.md)

@@ -69,7 +69,7 @@ namespace MonoMod.Core.Platforms
                 ArchitectureKind.x86 => new Architectures.x86Arch(system),
                 ArchitectureKind.x86_64 => new Architectures.x86_64Arch(system),
                 ArchitectureKind.Arm => throw new NotImplementedException(),
-                ArchitectureKind.Arm64 => throw new NotImplementedException(),
+                ArchitectureKind.Arm64 => new Architectures.Arm64Arch(system),
                 var kind => throw new PlatformNotSupportedException($"Architecture kind {kind} not supported"),
             };
         }
@@ -88,7 +88,7 @@ namespace MonoMod.Core.Platforms
             {
                 OSKind.Posix => throw new NotImplementedException(),
                 OSKind.Linux => new Systems.LinuxSystem(),
-                OSKind.Android => throw new NotImplementedException(),
+                OSKind.Android => new Systems.AndroidSystem(),
                 OSKind.OSX => new Systems.MacOSSystem(),
                 OSKind.IOS => throw new NotImplementedException(),
                 OSKind.BSD => throw new NotImplementedException(),
@@ -633,7 +633,9 @@ namespace MonoMod.Core.Platforms
 
             if (from is MethodInfo fromInfo &&
                 to is MethodInfo toInfo &&
-                !fromInfo.IsStatic && to.IsStatic)
+                !fromInfo.IsStatic && to.IsStatic &&
+                // Arm64 always passes the return buffer in x8, not as an argument, so no fix up is needed
+                PlatformDetection.Architecture is not ArchitectureKind.Arm64)
             {
                 var retType = fromInfo.ReturnType;
                 // if from has `this` and to doesn't, then we need to fix up the abi
