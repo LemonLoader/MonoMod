@@ -289,7 +289,18 @@ namespace MonoMod.Core.Platforms.Memory
             this.pageSize = pageSize;
 
             pageSizeIsPow2 = BitOperations.IsPow2(pageSize);
-            pageBaseMask = ~(nint)0 << BitOperations.TrailingZeroCount(pageSize);
+            pageBaseMask = ~(nint)0 << TrailingZeroCount(pageSize); // uses a custom trailingzerocount to lazily fix an issue
+        }
+
+        private static int TrailingZeroCount(nint value)
+        {
+            int count = 0;
+            while ((value & 1) == 0 && value != 0)
+            {
+                count++;
+                value >>= 1;
+            }
+            return count;
         }
 
         /// <summary>
